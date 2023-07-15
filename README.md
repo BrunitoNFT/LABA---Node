@@ -1,4 +1,4 @@
-Please to init and run the project run the following commands:
+Execute the following commands in the terminal to execute homework tests:
 
 - npm install
 - npm test

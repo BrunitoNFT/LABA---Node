@@ -187,3 +187,50 @@ describe('createCounter', () => {
     expect(counter1()).toBe(3);
   });
 });
+
+// Task 4: Recursion and Tail Call Optimization
+
+describe('calculateFactorial', () => {
+  it('should calculate the factorial of a given number', () => {
+    expect(calculateFactorial(5)).toBe(120);
+    expect(calculateFactorial(7)).toBe(5040);
+    expect(calculateFactorial(0)).toBe(1);
+  });
+});
+
+describe('power', () => {
+  it('should calculate the power of a base to an exponent', () => {
+    expect(power(2, 3)).toBe(8);
+    expect(power(5, 0)).toBe(1);
+    expect(power(2, -3)).toBe(0.125);
+  });
+});
+
+// Task 5: Lazy Evaluation and Generators
+
+describe('lazyMap', () => {
+  it('should lazily apply a mapping function to each element of the array', () => {
+    const array = [1, 2, 3, 4, 5];
+    const mappingFunction = x => x * 2;
+    const lazyMappedArray = lazyMap(array, mappingFunction);
+
+    expect(lazyMappedArray.next().value).toBe(2);
+    expect(lazyMappedArray.next().value).toBe(4);
+    expect(lazyMappedArray.next().value).toBe(6);
+    expect(lazyMappedArray.next().value).toBe(8);
+    expect(lazyMappedArray.next().value).toBe(10);
+  });
+});
+
+describe('fibonacciGenerator', () => {
+  it('should generate Fibonacci numbers using lazy evaluation', () => {
+    const fibGen = fibonacciGenerator();
+
+    expect(fibGen.next().value).toBe(1);
+    expect(fibGen.next().value).toBe(1);
+    expect(fibGen.next().value).toBe(2);
+    expect(fibGen.next().value).toBe(3);
+    expect(fibGen.next().value).toBe(5);
+    expect(fibGen.next().value).toBe(8);
+  });
+});

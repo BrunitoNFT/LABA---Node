@@ -221,7 +221,6 @@ function concatenateArrays(...args) {
 function findMinimumValue(...args) {
   let newArr = concatenateArrays(...args); // Use spread operator to pass individual arguments
   let minValue = Infinity;
-  console.log('new arr is: ', newArr);
   newArr.forEach(item => {
     let numberValue;
     try {

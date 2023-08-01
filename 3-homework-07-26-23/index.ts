@@ -81,7 +81,7 @@ function filterUniqueWords(text: string): string[] {
   const sortAlphabetically = (words: string[]) =>
     words.sort((a, b) => a.localeCompare(b));
 
-  const uniqueWords = splitText(text).filter(Boolean);
+  const uniqueWords = splitText(text.toLowerCase()).filter(Boolean);
   return sortAlphabetically(getUniqueWords(uniqueWords));
 }
 
@@ -167,25 +167,42 @@ function power(base: number, exponent: number): number {
 
 // 5.1)
 
-function* lazyMap<T, R>(
+function lazyMap<T, R>(
   array: T[],
   mappingFunction: (element: T) => R
-): Generator<R> {
-  for (const element of array) {
-    yield mappingFunction(element);
-  }
+): {
+  next: () => IteratorResult<R>;
+} {
+  let index = 0;
+
+  return {
+    next: (): IteratorResult<R> => {
+      if (index < array.length) {
+        const mappedValue = mappingFunction(array[index]);
+        index++;
+        return { value: mappedValue, done: false };
+      } else {
+        return { value: undefined as any, done: true };
+      }
+    }
+  };
 }
 
 // 5.2)
 
-function* fibonacciGenerator(): Generator<number> {
+function fibonacciGenerator(): {
+  next: () => IteratorResult<number>;
+} {
   let prev = 0;
   let curr = 1;
 
-  while (true) {
-    yield curr;
-    [prev, curr] = [curr, prev + curr];
-  }
+  return {
+    next(): IteratorResult<number> {
+      const value = curr;
+      [prev, curr] = [curr, prev + curr];
+      return { value, done: false };
+    }
+  };
 }
 
 module.exports = {

@@ -61,7 +61,7 @@ function filterUniqueWords(text) {
     const splitText = (text) => text.split(/\W+/);
     const getUniqueWords = (words) => Array.from(new Set(words));
     const sortAlphabetically = (words) => words.sort((a, b) => a.localeCompare(b));
-    const uniqueWords = splitText(text).filter(Boolean);
+    const uniqueWords = splitText(text.toLowerCase()).filter(Boolean);
     return sortAlphabetically(getUniqueWords(uniqueWords));
 }
 function getAverageGrade(students) {
@@ -115,19 +115,32 @@ function power(base, exponent) {
     return base * power(base, exponent - 1);
 }
 // 5.1)
-function* lazyMap(array, mappingFunction) {
-    for (const element of array) {
-        yield mappingFunction(element);
-    }
+function lazyMap(array, mappingFunction) {
+    let index = 0;
+    return {
+        next: () => {
+            if (index < array.length) {
+                const mappedValue = mappingFunction(array[index]);
+                index++;
+                return { value: mappedValue, done: false };
+            }
+            else {
+                return { value: undefined, done: true };
+            }
+        }
+    };
 }
 // 5.2)
-function* fibonacciGenerator() {
+function fibonacciGenerator() {
     let prev = 0;
     let curr = 1;
-    while (true) {
-        yield curr;
-        [prev, curr] = [curr, prev + curr];
-    }
+    return {
+        next() {
+            const value = curr;
+            [prev, curr] = [curr, prev + curr];
+            return { value, done: false };
+        }
+    };
 }
 module.exports = {
     calculateDiscountedPrice,

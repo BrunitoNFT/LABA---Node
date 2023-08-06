@@ -13,6 +13,7 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.1.0",

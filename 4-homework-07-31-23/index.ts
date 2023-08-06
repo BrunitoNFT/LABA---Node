@@ -92,7 +92,7 @@ Object.defineProperties(person, {
 person.updateInfo = function(newInfo: any) {
   Object.keys(newInfo).forEach(propertyName => {
     if (person.hasOwnProperty(propertyName)) {
-      console.warn(
+      console.log(
         `Cannot update read-only property: ${propertyName}. Skipping...`
       );
     } else {

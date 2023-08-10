@@ -40,11 +40,13 @@ function customFilterUnique<T>(
   callback: CustomFilterCallback<T>
 ): T[] {
   const uniqueArray: T[] = [];
+  const seenValues = new Set<T>();
 
   for (let i = 0; i < array.length; i++) {
     const item = array[i];
-    if (callback(item, i, array)) {
+    if (!seenValues.has(item) && callback(item, i, array)) {
       uniqueArray.push(item);
+      seenValues.add(item);
     }
   }
 
@@ -86,7 +88,6 @@ function customShuffle<T>(arr: T[]): T[] {
 }
 
 // task 4
-
 
 function getArrayIntersection<T>(array1: T[], array2: T[]): T[] {
   return array1.filter(item => array2.includes(item));

@@ -33,10 +33,12 @@ Task 5: Array Performance Analysis
 2. Use the `measureArrayPerformance` function to compare the performance of built-in array methods (`map`, `filter`, `reduce`, etc.) against your custom array manipulation functions. */
 function customFilterUnique(array, callback) {
     const uniqueArray = [];
+    const seenValues = new Set();
     for (let i = 0; i < array.length; i++) {
         const item = array[i];
-        if (callback(item, i, array)) {
+        if (!seenValues.has(item) && callback(item, i, array)) {
             uniqueArray.push(item);
+            seenValues.add(item);
         }
     }
     return uniqueArray;

@@ -89,15 +89,42 @@ Object.defineProperties(person, {
   }
 });
 
+/* task 4
+updateInfo should also update properties of the object that are existing but also they are non readonly
+(like address)
+Don't use Object.freeze(clone) (Object.preventExtensions() is allowed)
+ */
+
 person.updateInfo = function(newInfo: any) {
   Object.keys(newInfo).forEach(propertyName => {
-    if (person.hasOwnProperty(propertyName)) {
+    if (!person.hasOwnProperty(propertyName)) {
       console.log(
-        `Cannot update read-only property: ${propertyName}. Skipping...`
+        `Property ${propertyName} does not exist in the object. Skipping...`
       );
-    } else {
-      person[propertyName] = newInfo[propertyName];
+      return;
     }
+
+    const propertyDescriptor = Object.getOwnPropertyDescriptor(
+      person,
+      propertyName
+    );
+
+    if (!propertyDescriptor) {
+      console.log(
+        `Property ${propertyName} does not have a descriptor. Skipping...`
+      );
+      return;
+    }
+
+    if (!propertyDescriptor.configurable || !propertyDescriptor.writable) {
+      console.log(
+        `Cannot update non-configurable or non-writable property: ${propertyName}. Skipping...`
+      );
+      return;
+    }
+
+    Object.preventExtensions(person);
+    person[propertyName] = newInfo[propertyName];
   });
 };
 

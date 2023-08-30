@@ -41,7 +41,7 @@ class AsyncOperationManager {
     After X miliseconds have passed event and handler will be moved to event queue.
     If no microtask callback is waiting to be executed, event loop will iterate in the first phase which is timer and will find this callback waiting.
     The callback will be moved to call stack and executed.
-    After the execution of the callback it doesen't matter anything else the console.log will appear and inmediatly after the nextTick callback will be executed.
+    After the execution of the callback it doesen't matter anything else the console.log will appear and inmediatly after the nextTick callback will be executed because is in microtask and has priority.
     */
     simulateAsyncOperation(miliseconds) {
         setTimeout(() => {
@@ -53,9 +53,8 @@ class AsyncOperationManager {
     }
     /*
     This method will trigger an operation in sync event dimultiplexer.
-    After miliseconds have passed event and handler will be moved to event queue.
-    If no microtask callback is waiting to be executed, event loop will iterate in the first phase which is timer and will find this callback waiting.
-    The callback will be moved to call stack and executed.
+    If no microtask callback is waiting to be executed, event loop will iterate in the phases and will find this callback waiting in check phase.
+    The callback will be moved to call stack if it is empty and cb content will be executed.
     */
     scheduleImmediate() {
         setImmediate(() => {
@@ -64,7 +63,11 @@ class AsyncOperationManager {
     }
 }
 const asyncManager = new AsyncOperationManager();
-
-
+// In this example, sometimes immediate will execute before and other times timeout 0.
+// This depends on the context in which they are called. If both are called from within the main module,
+// then timing will be bound by the performance of the process (which can be impacted by other applications running on the machine).
 asyncManager.simulateAsyncOperation(0);
 asyncManager.scheduleImmediate();
+// I could analize that the microtask is always executed after timeout.
+// Because as I said event loop will check in microtask queue after each event phase, even though there is a immediate cb in a following event loop stage,
+// it doesn't matter what, event loop will check in microtask queue first and then in other event loop stages.

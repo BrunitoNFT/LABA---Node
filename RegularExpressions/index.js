@@ -1,17 +1,10 @@
 "use strict";
-const dateRegEx = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|[1-5][0-9]):(0[0-9]|[1-5][0-9])\.([0-9]{3})Z$/;
-const tokenizer = /({|}|[|]|,|:|true|false|null|undefined|"[^"]*"|-?\d+(\.\d+)?|\[|\])/g;
-function myJSONParse(jsonString) {
+const dateRegEx2 = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|[1-5][0-9]):(0[0-9]|[1-5][0-9])\.([0-9]{3})Z$/;
+const tokenizer2 = /({|}|[|]|,|:|true|false|null|undefined|"[^"]*"|-?\d+(\.\d+)?|\[|\])/g;
+function myJSONParse2(jsonString) {
     // Tokenization way 1
-    const tokens = jsonString.match(tokenizer);
+    const tokens = jsonString.match(tokenizer2);
     console.log('tokens: ', tokens);
-    /*
-    Tokenization way 2
-    let match;
-    while ((match = tokenizer.exec(jsonString))) {
-      tokens.push(match[0]);
-    }
-    */
     // Recursive function to parse tokens
     function parse() {
         if (!tokens || tokens.length < 1) {
@@ -57,7 +50,7 @@ function myJSONParse(jsonString) {
         }
         else if (token.match(/^"/)) {
             const ma = token.slice(1, -1);
-            if (ma.match(dateRegEx)) {
+            if (ma.match(dateRegEx2)) {
                 return new Date(ma); // Date
             }
             return ma; // return string without quotes
@@ -84,4 +77,4 @@ function myJSONParse(jsonString) {
     }
     return parse();
 }
-module.exports = { myJSONParse };
+module.exports = { myJSONParse2 };

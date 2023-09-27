@@ -1,4 +1,5 @@
-const { myJSONParse2: myJSONParse } = require('./index.js');
+//const { myJSONParse } = require('./index.js');
+const { myJSONParse } = require('./nonRecursive.js');
 
 describe('myJSONParse function', () => {
   test('should parse basic JSON string correctly', () => {

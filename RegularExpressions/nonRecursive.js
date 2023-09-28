@@ -14,6 +14,12 @@ function myJSONParse(jsonString) {
                 stackPosition[stackPosition.length - 1][currentKey] = newObj; //  We conect  the key with the nested obj
                 currentKey = null;
             }
+            else if (Array.isArray(stackPosition[stackPosition.length - 1])) {
+                stackPosition[stackPosition.length - 1].push(newObj);
+            }
+            else if (tokens[index - 1] && tokens[index - 1].match(/^\{$/)) {
+                throw new Error('The syntax of the incoming JSON string is WRONG.');
+            }
             stackPosition.push(newObj); // We keep track of the last obj
             continue;
         }
@@ -31,6 +37,9 @@ function myJSONParse(jsonString) {
             if (currentKey !== null) {
                 stackPosition[stackPosition.length - 1][currentKey] = newArr; //  We conect  the key with the nested arr
                 currentKey = null;
+            }
+            else if (Array.isArray(stackPosition[stackPosition.length - 1])) {
+                stackPosition[stackPosition.length - 1].push(newArr);
             }
             stackPosition.push(newArr);
             continue;

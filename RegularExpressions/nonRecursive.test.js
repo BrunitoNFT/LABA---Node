@@ -2,6 +2,37 @@
 const { myJSONParse } = require('./nonRecursive.js');
 
 describe('myJSONParse function', () => {
+  test('should parse large nested arrays with objects correctly', () => {
+    const json = `{
+      "data": [
+        [{"key": "value1"}, {"key": "value2"}],
+        [{"key": "value3"}, {"key": "value4"}],
+        [
+          {"key": "value5"},
+          {"nestedArray": [
+            {"nestedKey": "nestedValue1"},
+            {"nestedKey": "nestedValue2", "extraData": [1, 2, 3]}
+          ]}
+        ]
+      ]
+    }`;
+    expect(myJSONParse(json)).toEqual({
+      data: [
+        [{ key: 'value1' }, { key: 'value2' }],
+        [{ key: 'value3' }, { key: 'value4' }],
+        [
+          { key: 'value5' },
+          {
+            nestedArray: [
+              { nestedKey: 'nestedValue1' },
+              { nestedKey: 'nestedValue2', extraData: [1, 2, 3] }
+            ]
+          }
+        ]
+      ]
+    });
+  });
+
   test('should parse basic JSON string correctly', () => {
     const json = '{"key": "value", "num": 123}';
     expect(myJSONParse(json)).toEqual({ key: 'value', num: 123 });
@@ -43,6 +74,13 @@ describe('myJSONParse function', () => {
 
   test('should throw error for invalid token', () => {
     const json = '{"key": $invalidToken}';
+    expect(() => myJSONParse(json)).toThrow(
+      'The syntax of the incoming JSON string is WRONG.'
+    );
+  });
+
+  test('should throw error for invalid token', () => {
+    const json = '{{"key": "asd"}}';
     expect(() => myJSONParse(json)).toThrow(
       'The syntax of the incoming JSON string is WRONG.'
     );

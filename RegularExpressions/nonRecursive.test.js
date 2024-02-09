@@ -11,7 +11,7 @@ describe('myJSONParse function', () => {
           {"key": "value5"},
           {"nestedArray": [
             {"nestedKey": "nestedValue1"},
-            {"nestedKey": "nestedValue2", "extraData": [1, 2, 3]}
+            {"nestedKey": "nestedValue2", "extraData": [1, -2.12, 3]}
           ]}
         ]
       ]
@@ -25,7 +25,7 @@ describe('myJSONParse function', () => {
           {
             nestedArray: [
               { nestedKey: 'nestedValue1' },
-              { nestedKey: 'nestedValue2', extraData: [1, 2, 3] }
+              { nestedKey: 'nestedValue2', extraData: [1, -2.12, 3] }
             ]
           }
         ]

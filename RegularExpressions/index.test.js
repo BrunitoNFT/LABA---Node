@@ -5,6 +5,36 @@ describe('myJSONParse function', () => {
     const json = '{"key": "value", "num": 123}';
     expect(myJSONParse(json)).toEqual({ key: 'value', num: 123 });
   });
+  test('should parse large nested arrays with objects correctly', () => {
+    const json = `{
+      "data": [
+        [{"key": "value1"}, {"key": "value2"}],
+        [{"key": "value3"}, {"key": "value4"}],
+        [
+          {"key": "value5"},
+          {"nestedArray": [
+            {"nestedKey": "nestedValue1"},
+            {"nestedKey": "nestedValue2", "extraData": [1, -2.12, 3]}
+          ]}
+        ]
+      ]
+    }`;
+    expect(myJSONParse(json)).toEqual({
+      data: [
+        [{ key: 'value1' }, { key: 'value2' }],
+        [{ key: 'value3' }, { key: 'value4' }],
+        [
+          { key: 'value5' },
+          {
+            nestedArray: [
+              { nestedKey: 'nestedValue1' },
+              { nestedKey: 'nestedValue2', extraData: [1, -2.12, 3] }
+            ]
+          }
+        ]
+      ]
+    });
+  });
 
   test('should parse date strings into Date objects', () => {
     const json = '{"date":"2023-09-26T15:01:26.553Z"}';

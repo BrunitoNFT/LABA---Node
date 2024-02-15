@@ -1,18 +1,18 @@
 // Merge Sort
 
 // example: [23,12,26,4]
-function mergeSort<T>(array: T[]): T[] {
+function mergeSortt<T>(array: T[]): T[] {
   if (array.length <= 1) return array;
 
   const mid = Math.floor(array.length / 2); // 1) 2 | 2) 1
-  const left = mergeSort(array.slice(0, mid)); // 1) [23,12] | 2) Here we are going to send 23 (left) and 12 (right) -> Due to the 23 and 12 are going to be unique arrays they will return in the first if block and will go 23 and 12 to merge([23],[12])
-  const right = mergeSort(array.slice(mid)); // 1) [26,4] |
+  const left = mergeSortt(array.slice(0, mid)); // 1) [23,12] | 2) Here we are going to send 23 (left) and 12 (right) -> Due to the 23 and 12 are going to be unique arrays they will return in the first if block and will go 23 and 12 to merge([23],[12])
+  const right = mergeSortt(array.slice(mid)); // 1) [26,4] |
 
-  return merge(left, right);
+  return mergee(left, right);
 }
 
 // Our left side will call this method merge first [23] [12]
-function merge<T>(left: T[], right: T[]): T[] {
+function mergee<T>(left: T[], right: T[]): T[] {
   let result: T[] = []; // [23]
   let i = 0;
   let j = 0; // 1
@@ -34,7 +34,7 @@ function merge<T>(left: T[], right: T[]): T[] {
 // Quick Sort
 // [43,12,2,3]
 // [43,12]
-function quickSort<T>(array: T[]): T[] {
+function quickSortt<T>(array: T[]): T[] {
   if (array.length <= 1) return array;
 
   const pivot = array[array.length - 1]; // 3 //second call 12
@@ -53,14 +53,14 @@ function quickSort<T>(array: T[]): T[] {
 
   // second time we will return [[],pivot 12, right 43] [12,43]
   return [
-    ...quickSort(left) /*We have 2 finally here*/,
+    ...quickSortt(left) /*We have 2 finally here*/,
     pivot /*3*/,
-    ...quickSort(right) /*we trigger here quick([43,12]) -> 12, 43k*/
+    ...quickSortt(right) /*we trigger here quick([43,12]) -> 12, 43k*/
   ];
 }
 
 // Bubble Sort
-function bubbleSort(arr: number[]): number[] {
+function bubbleSortt(arr: number[]): number[] {
   const n = arr.length;
   // Bucle externo para controlar cada pasada
   for (let i = 0; i < n - 1; i++) {
@@ -81,7 +81,7 @@ It is the slowest sort algorithm because of it exponenciall time duration relate
 */
 
 module.exports = {
-  bubbleSort,
-  mergeSort,
-  quickSort
+  bubbleSortt,
+  mergeSortt,
+  quickSortt
 };

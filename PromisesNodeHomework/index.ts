@@ -1,62 +1,74 @@
-async function promiseAll(arrayOfPromises: Promise<any>[]): Promise<any[]> {
-  let newArr = [];
+function promiseAll(arrayOfPromises: Promise<any>[]): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    const results: any[] = [];
+    let counterOfResults = 0;
 
-  for (let i = 0; i < arrayOfPromises.length; i++) {
-    newArr.push(await arrayOfPromises[i]);
-  }
-  return newArr;
-}
+    arrayOfPromises.forEach((promise, index) => {
+      promise
+        .then(res => {
+          counterOfResults++;
+          results[index] = res;
 
-async function promiseAllSettled(
-  arrayOfPromises: Promise<any>[]
-): Promise<any[]> {
-  let newArr: any[] = [];
-  for (let i = 0; i < arrayOfPromises.length; i++) {
-    newArr.push(
-      await arrayOfPromises[i]
-        .then(result => {
-          return {
-            status: 'fulfilled',
-            value: result
-          };
+          if (arrayOfPromises.length == counterOfResults) {
+            resolve(results);
+          }
         })
         .catch(error => {
-          return {
-            status: 'rejected',
-            reason: error
-          };
+          reject(error);
+        });
+    });
+  });
+}
+
+function promiseAllSettled(arrayOfPromises: Promise<any>[]): Promise<any[]> {
+  return new Promise(resolve => {
+    let results: any[] = [];
+    let counterOfResults = 0;
+
+    arrayOfPromises.forEach((promise, index) => {
+      promise
+        .then(res => {
+          results[index] = { status: 'fullfilled', value: res };
+          counterOfResults++;
         })
-    );
-  }
-  return newArr;
+        .catch((err: Error) => {
+          results[index] = { status: 'rejected', reason: JSON.stringify(err) };
+          counterOfResults++;
+        })
+        .finally(() => {
+          if (counterOfResults === arrayOfPromises.length) {
+            resolve(results);
+          }
+        });
+    });
+  });
 }
 
 async function chainPromises(
   arrayOfFunctionsWithPromises: ((arg1?: any) => Promise<any>)[]
 ) {
-  let cont = 0;
-  async function promiseBucle(parameter?: Promise<any>): Promise<any> {
-    if (cont == arrayOfFunctionsWithPromises.length - 1) {
-      let ans = await arrayOfFunctionsWithPromises[cont](
-        parameter ? parameter : ''
-      );
-      return ans;
-    } else {
-      const res = await arrayOfFunctionsWithPromises[cont](
-        parameter ? parameter : ''
-      );
-      cont++;
-      return await promiseBucle(res);
-    }
+  let nextArg: unknown = undefined;
+  let funcIterable: number = 0;
+  function iterateOverFuncArr(resolve: (value: unknown) => void) {
+    arrayOfFunctionsWithPromises[funcIterable](nextArg).then(res => {
+      nextArg = res;
+      funcIterable++;
+      if (funcIterable < arrayOfFunctionsWithPromises.length) {
+        return iterateOverFuncArr(resolve);
+      } else {
+        resolve(nextArg);
+      }
+    });
   }
-  let finalAns = await promiseBucle();
-  return finalAns;
+  return new Promise(resolve => {
+    iterateOverFuncArr(resolve);
+  });
 }
 
 function promisify(callbackStyleFunction: Function) {
   return function(...args: any[]) {
     return new Promise((resolve, reject) => {
-      callbackStyleFunction(...args, (error: Function, result: Function) => {
+      callbackStyleFunction(...args, (error: null | string, result: any) => {
         if (error) {
           reject(error);
         } else {

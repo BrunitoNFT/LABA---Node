@@ -1,172 +1,18 @@
 "use strict";
-//Part 1: Class Design
-/**
- * Represents a Book in the bookstore.
- */
-class Book {
-    constructor(title, author, isbn, price, availability) {
-        this._title = title;
-        this._author = author;
-        this._isbn = isbn;
-        this._price = price;
-        this._availability = availability;
-    }
-    get title() {
-        return this._title;
-    }
-    set title(value) {
-        this._title = value;
-    }
-    get author() {
-        return this._author;
-    }
-    set author(value) {
-        this._author = value;
-    }
-    get isbn() {
-        return this._isbn;
-    }
-    set isbn(value) {
-        this._isbn = value;
-    }
-    get price() {
-        return this._price;
-    }
-    set price(value) {
-        this._price = value;
-    }
-    get availability() {
-        return this._availability;
-    }
-    set availability(value) {
-        this._availability = value;
-    }
-}
-/**
- * Represents a Fiction Book, inheriting from Book class.
- */
-class BookFiction extends Book {
-    constructor(title, author, isbn, price, availability) {
-        super(title, author, isbn, price, availability);
-        this._type = 'fiction';
-    }
-    get type() {
-        return this._type;
-    }
-    set type(value) {
-        this._type = value;
-    }
-}
-/**
- * Represents a Non-Fiction Book, inheriting from Book class.
- */
-class BookNonFiction extends Book {
-    constructor(title, author, isbn, price, availability) {
-        super(title, author, isbn, price, availability);
-        this._type = 'non-fiction';
-    }
-    get type() {
-        return this._type;
-    }
-    set type(value) {
-        this._type = value;
-    }
-}
-/**
- * Represents a User of the bookstore.
- */
-class User {
-    constructor(name, email, userId) {
-        this._name = name;
-        this._email = email;
-        this._userId = userId;
-    }
-    get name() {
-        return this._name;
-    }
-    set name(value) {
-        this._name = value;
-    }
-    get email() {
-        return this._email;
-    }
-    set email(value) {
-        this._email = value;
-    }
-    get userId() {
-        return this._userId;
-    }
-    set userId(value) {
-        this._userId = value;
-    }
-}
-/**
- * Represents a Cart in the bookstore.
- */
-class Cart {
-    constructor(books, user) {
-        this._books = books;
-        this._user = user;
-    }
-    get books() {
-        return this._books;
-    }
-    set books(value) {
-        this._books = value;
-    }
-    get user() {
-        return this._user;
-    }
-    set user(value) {
-        this._user = value;
-    }
-    addBook(book) {
-        this._books.push(book);
-    }
-    removeBook(book) {
-        this._books = this._books.filter(b => b.isbn !== book.isbn);
-    }
-    calculateTotalPrice() {
-        return this._books.reduce((total, book) => total + book.price, 0);
-    }
-    removeAll() {
-        this._books = [];
-    }
-}
-/**
- * Represents an Order in the bookstore.
- */
-class Order {
-    constructor(user, books) {
-        this._user = user;
-        if (books instanceof Cart && books.books.length > 0) {
-            this._books = books;
-        }
-        else {
-            throw new Error('Orders are done with Carts greater than 0.');
-        }
-    }
-    totalPrice() {
-        return this._books.calculateTotalPrice();
-    }
-    pay() {
-        let length = this._books.books.length;
-        console.log(`User ${this._user.name} paid ${length} books for a total of $${this
-            ._books.calculateTotalPrice()}`);
-    }
-}
+Object.defineProperty(exports, "__esModule", { value: true });
+const classes_1 = require("./classes");
 //Part 2: Implementation
 // Instances of Books
-let book1 = new Book('Book 1', 'Author 1', '123', 10, true);
-let book2 = new BookFiction('Book 2', 'Author 2', '456', 20, false);
-let book3 = new BookNonFiction('Book 3', 'Author 3', '789', 30, true);
-let book4 = new Book('Book 4', 'Author 4', '101112', 40, false);
+let book1 = new classes_1.Book('Book 1', 'Author 1', '123', 10, 34);
+let book2 = new classes_1.BookFiction('Book 2', 'Author 2', '456', 20, 12);
+let book3 = new classes_1.BookNonFiction('Book 3', 'Author 3', '789', 30, 2);
+let book4 = new classes_1.Book('Book 4', 'Author 4', '101112', 40, 45);
 // Instances of Users
-let user1 = new User('John Doe', 'john@example.com', '123');
-let user2 = new User('Jane Doe', 'jane@example.com', '456');
+let user1 = new classes_1.User('John Doe', 'john@example.com', '123');
+let user2 = new classes_1.User('Jane Doe', 'jane@example.com', '456');
 // Instances of Carts
-let cartUser1 = new Cart([], user1);
-let cartUser2 = new Cart([], user2);
+let cartUser1 = new classes_1.Cart([], user1);
+let cartUser2 = new classes_1.Cart([], user2);
 //Part 3: Demonstration
 // Create a scenario where users browse books, add them to their carts, and place orders
 console.log('Scenario: Users browsing books, adding to carts, and placing orders\n');
@@ -201,26 +47,26 @@ console.log('');
 // Placing orders
 console.log('Placing Orders:');
 console.log(`User ${user1.name} places an order `);
-let orderDemonstration1 = new Order(user1, cartUser1);
+let orderDemonstration1 = new classes_1.Order(user1, cartUser1);
 console.log(`- ${book1.title} by ${book1.author}`);
 console.log(`Total Price: $${orderDemonstration1.totalPrice()}`);
 orderDemonstration1.pay();
 console.log('');
 console.log(`User ${user2.name} places an order `);
-let orderDemonstration2 = new Order(user2, cartUser2);
+let orderDemonstration2 = new classes_1.Order(user2, cartUser2);
 console.log(`- ${book3.title} by ${book3.author}`);
 console.log(`Total Price: $${orderDemonstration2.totalPrice()}`);
 orderDemonstration2.pay();
 console.log('');
 /*
 Encapsulation:
-Encapsulation is well-maintained in this codebase through the use of private access modifier.
+Encapsulation is done through the use of private access modifier.
 Properties of the classes are accessed through getters and setters, ensuring controlled access to the internal state
 of the objects and promoting data integrity.
 */
 /*
 Polymorphism:
-Polymorphism is demonstrated through inheritance in this codebase. The main Book class serves as a base class
+Polymorphism is demonstrated through inheritance. The main Book class serves as a base class
 from which two subclasses, BookFiction and BookNonFiction, inherit. Despite being subclasses, instances of
-BookFiction and BookNonFiction can be treated as instances of Book, promoting code reuse and flexibility.
+BookFiction and BookNonFiction can be treated as Book, promoting code reuse and flexibility.
 */
